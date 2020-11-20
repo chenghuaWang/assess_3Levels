@@ -1,5 +1,7 @@
 import cv2
 import numpy as np
+import random
+import copy
 
 WIN_NAME = "Test show"
 
@@ -18,36 +20,54 @@ def my_rectangle(image, pt1, pt2, color):
             image[i, pt2[1], j] = color[j]
 
 
-class pipin:
-    judge_down = False
-    copy_image = np.zeros((512, 512, 3), dtype=np.uint8)
-    show_image = np.zeros((512, 512, 3), dtype=np.uint8)
-    start_pt = (0, 0)
+def color_change():
+    ret = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
+    return ret
+
+
+class pipin(object):
+    def __init__(self):
+        self.judge_down = False
+        self.copy_image = np.zeros((512, 512, 3), dtype=np.uint8)
+        self.show_image = np.zeros((512, 512, 3), dtype=np.uint8)
+        self.start_pt = (0, 0)
+        self.mouse_move = False
+
+    def reset_image(self):
+        self.show_image = self.copy_image
+
+    def set_image(self):
+        self.copy_image = self.show_image
 
 
 def on_mouse_draw(event, x, y, flags, param):
-    pipin.judge_down = False
-    if event == cv2.EVENT_LBUTTONDOWN and pipin.judge_down == False:
-        pipin.start_pt = (y, x)
+    if mypipin.mouse_move:
+        mypipin.reset_image()
+    if event == cv2.EVENT_LBUTTONDOWN and mypipin.judge_down == False:
+        mypipin.start_pt = (y, x)
         print("START:Y={0},X={1}".format(y, x))
-        pipin.judge_down = True
-    if event == cv2.EVENT_MOUSEMOVE and pipin.judge_down==True:
+        mypipin.judge_down = True
+        mypipin.mouse_move = True
+    if event == cv2.EVENT_MOUSEMOVE and mypipin.judge_down == True:
         end_pt = (y, x)
-        my_rectangle(pipin.show_image, pipin.start_pt, end_pt, (0, 255, 0))
+        my_rectangle(mypipin.show_image, mypipin.start_pt, end_pt, color_change())
     if event == cv2.EVENT_LBUTTONUP:
-        pipin.judge_down = False
+        mypipin.mouse_move = False
+        mypipin.judge_down = False
         print("END:Y={0},X={1}".format(y, x))
         end_pt = (y, x)
-        my_rectangle(pipin.show_image, pipin.start_pt, end_pt, (0, 255, 0))
+        my_rectangle(mypipin.show_image, mypipin.start_pt, end_pt, color_change())
+        mypipin.set_image()
 
 
 if __name__ == '__main__':
-    img = np.zeros((512, 512, 3), dtype=np.uint8)
-    img_reverse = img.copy()
+    mypipin = pipin()
+    # img = np.zeros((512, 512, 3), dtype=np.uint8)
+    # img_reverse = img.copy()
     cv2.namedWindow(WIN_NAME, 0)
     cv2.setMouseCallback(WIN_NAME, on_mouse_draw)
     while True:
-        cv2.imshow(WIN_NAME, pipin.show_image)
+        cv2.imshow(WIN_NAME, mypipin.show_image)
         key = cv2.waitKey(30)
         if key == 27:  # ESC
             break
