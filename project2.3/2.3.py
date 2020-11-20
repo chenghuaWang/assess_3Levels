@@ -31,8 +31,7 @@ def on_mouse_draw(event, x, y, flags, param):
         pipin.start_pt = (y, x)
         print("START:Y={0},X={1}".format(y, x))
         pipin.judge_down = True
-    if (event == cv2.EVENT_MOUSEMOVE) and (pipin.judge_down == True):
-        pipin.show_image = pipin.copy_image
+    if event == cv2.EVENT_MOUSEMOVE and pipin.judge_down==True:
         end_pt = (y, x)
         my_rectangle(pipin.show_image, pipin.start_pt, end_pt, (0, 255, 0))
     if event == cv2.EVENT_LBUTTONUP:
