@@ -34,16 +34,16 @@ class pipin(object):
         self.mouse_move = False
 
     def reset_image(self):
-        self.show_image = self.copy_image
+        self.show_image = copy.deepcopy(self.copy_image)
 
     def set_image(self):
-        self.copy_image = self.show_image
+        self.copy_image = copy.deepcopy(self.show_image)
 
 
 def on_mouse_draw(event, x, y, flags, param):
     if mypipin.mouse_move:
         mypipin.reset_image()
-        mypipin.show_image = np.zeros((512, 512, 3), dtype=np.uint8)
+        # mypipin.show_image = np.zeros((512, 512, 3), dtype=np.uint8)
     if event == cv2.EVENT_LBUTTONDOWN and mypipin.judge_down == False:
         mypipin.start_pt = (y, x)
         print("START:Y={0},X={1}".format(y, x))
