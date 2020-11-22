@@ -11,7 +11,7 @@ import cv2
 # f(i+u,j+v) = (1-u)(1-v)f(i,j) + (1-u)vf(i,j+1) + u(1-v)f(i+1,j) + uvf(i+1,j+1)
 def my_bilinear_interpolation(image_func, ori2aim):
     pic_h, pic_w, pic_channel = image_func.shape
-    aim_h, aim_w = ori2aim[1], ori2aim[0]
+    aim_h, aim_w = int(ori2aim[1]), int(ori2aim[0])
     # special judge
     if pic_h == aim_h and pic_w == aim_w:
         return image_func.copy()
@@ -34,6 +34,8 @@ def my_bilinear_interpolation(image_func, ori2aim):
                 temp0 = (pic_x1 - pic_x) * img[pic_y0, pic_x0, i] + (pic_x - pic_x0) * img[pic_y0, pic_x1, i]
                 temp1 = (pic_x1 - pic_x) * img[pic_y1, pic_x0, i] + (pic_x - pic_x0) * img[pic_y1, pic_x1, i]
                 aim_pic[aim_y, aim_x, i] = int((pic_y1 - pic_y) * temp0 + (pic_y - pic_y0) * temp1)
+            cv2.imshow('keduoli', aim_pic)
+            key = cv2.waitKey(1)
     return aim_pic
 
 
@@ -47,15 +49,18 @@ while flag_out:
     else:
         flag_out = False
 if out_times < 0:
+    out_times=-out_times
     print("running")
     print("After window displayed,you can press s to save the photo")
+    cv2.namedWindow('keduoli', cv2.WINDOW_NORMAL)
     img2 = my_bilinear_interpolation(img, (img.shape[1]/out_times, img.shape[0]/out_times))
 else:
     print("running")
     print("After window displayed,you can press s to save the photo")
+    cv2.namedWindow('keduoli', cv2.WINDOW_NORMAL)
     img2 = my_bilinear_interpolation(img, (img.shape[1]*out_times, img.shape[0]*out_times))
 print("success")
-cv2.namedWindow('keduoli', cv2.WINDOW_NORMAL)
+#cv2.namedWindow('keduoli', cv2.WINDOW_NORMAL)
 cv2.imshow('keduoli', img2)
 buffer = cv2.waitKey(0) & 0xFF
 if buffer == 27:
