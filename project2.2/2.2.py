@@ -18,9 +18,9 @@ def my_bilinear_interpolation(image_func, ori2aim):
     # init dtype=uint8 means 0~255
     aim_pic = np.zeros((aim_h, aim_w, pic_channel), dtype=np.uint8)
     rate_x, rate_y = float(pic_w) / aim_w, float(pic_h) / aim_h
-    for i in range(pic_channel):
-        for aim_y in range(aim_h):
-            for aim_x in range(aim_w):
+    for aim_y in range(aim_h):
+        for aim_x in range(aim_w):
+            for i in range(pic_channel):
                 # SrcX=(dstX+0.5)* (srcWidth/dstWidth) -0.5
                 # SrcY=(dstY+0.5) * (srcHeight/dstHeight)-0.5
                 # To center justification
@@ -34,8 +34,8 @@ def my_bilinear_interpolation(image_func, ori2aim):
                 temp0 = (pic_x1 - pic_x) * img[pic_y0, pic_x0, i] + (pic_x - pic_x0) * img[pic_y0, pic_x1, i]
                 temp1 = (pic_x1 - pic_x) * img[pic_y1, pic_x0, i] + (pic_x - pic_x0) * img[pic_y1, pic_x1, i]
                 aim_pic[aim_y, aim_x, i] = int((pic_y1 - pic_y) * temp0 + (pic_y - pic_y0) * temp1)
-            cv2.imshow('keduoli', aim_pic)
-            key = cv2.waitKey(1)
+        cv2.imshow('keduoli', aim_pic)
+        key = cv2.waitKey(1)
     return aim_pic
 
 
