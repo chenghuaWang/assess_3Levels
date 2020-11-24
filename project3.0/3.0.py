@@ -16,7 +16,8 @@ def jacobi(a, b, x, k):
     del d_inv_buffer
     r = a - d
     for j in range(0, k + 1):
-        x = d_inv*(b - r * x)
+        # x = d_inv * (b - r * x)
+        x = d_inv.dot((b-r.dot(x)))
     return x
 
 
@@ -44,12 +45,12 @@ if __name__ == '__main__':
     img = np.zeros((256, 256, 3), dtype=np.uint8)
     for i in range(0, 256):
         for j in range(0, 256):
-            img[i][j][2] = x0[i * 256 + j]
+            img[i][j][2] = x0[i * 256 + j]-70
     for i in range(0, 256):
         for j in range(0, 256):
             img[i][j][1] = x0[256 * 256 + i * 256 + j]
     for i in range(0, 256):
         for j in range(0, 256):
-            img[i][j][0] = x0[256 * 256 * 2 + i * 256 + j]
+            img[i][j][0] = x0[256 * 256 * 2 + i * 256 + j]-15
     print(x0)
     cv2.imwrite("D:\AI_ML\pythonProject\project3.0\solver2.png", img)
