@@ -13,11 +13,11 @@ def jacobi(a, b, x, k):
     d = sparse.diags(d_data, dtype=np.int)
     d_inv = sparse.diags(d_inv_buffer, dtype=np.float)
     del d_data
-    del d_inv_buffer
+    # del d_inv_buffer
     r = a - d
     for j in range(0, k + 1):
+        x = d_inv_buffer * (b - r * x)
         # x = d_inv * (b - r * x)
-        x = d_inv.dot((b-r.dot(x)))
     return x
 
 
@@ -38,7 +38,7 @@ if __name__ == '__main__':
     del A_data
     # print(sA)
     x0 = np.ones(256 * 256 * 3, dtype=np.float)
-    x0 = jacobi(sA, B_matrix, x0, 1000)
+    x0 = jacobi(sA, B_matrix, x0, 5000)
     print(x0)
     # print(x0)
     x0 = x0.astype(int)
