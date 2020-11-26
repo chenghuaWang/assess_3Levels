@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 from scipy import sparse
-from scipy.linalg import lu
+from scipy.sparse.linalg import cg
 import cv2
 
 WIN_NAME = 'Test show'
@@ -13,11 +13,11 @@ def jacobi(a, b, x, k):
     d = sparse.diags(d_data, dtype=np.int)
     d_inv = sparse.diags(d_inv_buffer, dtype=np.float)
     del d_data
-    # del d_inv_buffer
+    del d_inv_buffer
     r = a - d
     for j in range(0, k + 1):
-        x = d_inv_buffer * (b - r * x)
-        # x = d_inv * (b - r * x)
+        # x = d_inv_buffer * (b - r * x)
+        x = d_inv * (b - r * x)
     return x
 
 
@@ -25,6 +25,7 @@ if __name__ == '__main__':
     A_buffer = pd.read_csv('A.txt', sep=',', header=None, dtype=str, na_filter=False)
     B_buffer = pd.read_csv('B.txt', sep=',', header=None, dtype=str, na_filter=False)
     A_matrix = np.array(A_buffer).astype(int)
+    print(A_matrix)
     del A_buffer
     B_matrix = np.array(B_buffer).astype(int)
     B_matrix = B_matrix[:, 2]
@@ -38,19 +39,20 @@ if __name__ == '__main__':
     del A_data
     # print(sA)
     x0 = np.ones(256 * 256 * 3, dtype=np.float)
-    x0 = jacobi(sA, B_matrix, x0, 5000)
+    x0 = jacobi(sA, B_matrix, x0, 3)
     print(x0)
+    # x0, info = cg(sA, B_matrix)
     # print(x0)
     x0 = x0.astype(int)
     img = np.zeros((256, 256, 3), dtype=np.uint8)
     for i in range(0, 256):
         for j in range(0, 256):
-            img[i][j][2] = x0[i * 256 + j]-70
+            img[i][j][2] = x0[i * 256 + j]
     for i in range(0, 256):
         for j in range(0, 256):
             img[i][j][1] = x0[256 * 256 + i * 256 + j]
     for i in range(0, 256):
         for j in range(0, 256):
-            img[i][j][0] = x0[256 * 256 * 2 + i * 256 + j]-15
+            img[i][j][0] = x0[256 * 256 * 2 + i * 256 + j]
     print(x0)
     cv2.imwrite("D:\AI_ML\pythonProject\project3.0\solver2.png", img)
