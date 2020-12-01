@@ -178,7 +178,7 @@ while Putin_flag2:
 img = BresenhamLine(img, x1_in, y1_in, x2_in, y2_in, R, G, B)
 line_flag = Putin_flag and Putin_flag2
 Putin_flag = True
-x3_in = y3_in = r_pixel = 0;
+x3_in = y3_in = r_pixel = 0
 while Putin_flag:
     print("to print a circle")
     r_pixel = int(input("R_pixel:"))
@@ -213,5 +213,5 @@ if (not line_flag) and (not circle_flag):
     if buffer == 27:
         cv2.destroyWindow(img)
     elif buffer == ord('s'):
-        cv2.imwrite("D:\AI_ML\pythonProject\project2.1\myke.jpg", img)
+        cv2.imwrite("D:\AI_ML\pythonProject\project2.4.2\myke.jpg", img)
         cv2.destroyWindow(img)
