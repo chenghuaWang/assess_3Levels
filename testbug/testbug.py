@@ -1,32 +1,17 @@
-# @Time    : 2018/5/22 17:23
-# @Author  : Sean
-# @Site    :
-# @File    : 1.py
-# @Software: PyCharm
-
+from PIL import ImageGrab
 import numpy as np
-
-A = np.array([[5.0, 2, 1], [-1, 4, 2], [2, -3, 10]])
-B = np.array([-12.0, 20, 3])
-x0 = np.array([1.0, 1, 1])
-x = np.array([0.0, 0, 0])
-times = 0
-
+import cv2
+p = ImageGrab.grab()#获得当前屏幕
+k=np.zeros((200,200),np.uint8)#清零
+a,b=p.size#获得当前屏幕的大小
+fourcc = cv2.VideoWriter_fourcc(*'XVID')#编码格式
+video = cv2.VideoWriter('test.avi', fourcc, 16, (a, b))#输出文件命名为test.mp4,帧率为16，可以自己设置
 while True:
-    for i in range(3):
-        temp = 0
-        tempx = x0.copy()
-        for j in range(3):
-            if i != j:
-                temp += x0[j] * A[i][j]
-        x[i] = (B[i] - temp) / A[i][i]
-        x0[i] = x[i].copy()
-    calTemp = max(abs(x - tempx))
-    times += 1
-    if calTemp < 1e-4:
+    im = ImageGrab.grab()#获得当前屏幕
+    imm=cv2.cvtColor(np.array(im), cv2.COLOR_RGB2BGR)#转为opencv的BGR格式
+    video.write(imm)#写入
+    # cv2.imshow('imm', k)#显示
+    if cv2.waitKey(1) & 0xFF == ord('q'):#q键推出
         break
-    else:
-        x0 = x.copy()
-
-print(times)
-print(x)
+video.release()
+cv2.destroyAllWindows()
