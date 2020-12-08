@@ -39,7 +39,7 @@ if __name__ == '__main__':
     del A_data
     # print(sA)
     x0 = np.ones(256 * 256 * 3, dtype=np.float)
-    x0 = jacobi(sA, B_matrix, x0, 3)
+    x0 = jacobi(sA, B_matrix, x0, 5)
     print(x0)
     # x0, info = cg(sA, B_matrix)
     # print(x0)
@@ -55,4 +55,5 @@ if __name__ == '__main__':
         for j in range(0, 256):
             img[i][j][0] = x0[256 * 256 * 2 + i * 256 + j]
     print(x0)
-    cv2.imwrite("D:\AI_ML\pythonProject\project3.0\solver2.png", img)
+    np.savetxt("D:\AI_ML\pythonProject\project3.0\\x.txt", x0, fmt='%d', delimiter=',')
+    cv2.imwrite("D:\AI_ML\pythonProject\project3.0\\x.jpg", img)
